@@ -1,0 +1,163 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Estacionamento</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            background-color: #f4f4f4;
+            margin: 0;
+            padding: 0;
+        }
+        .container {
+            width: 80%;
+            margin: auto;
+            overflow: hidden;
+        }
+        header {
+            background: #333;
+            color: #fff;
+            padding-top: 30px;
+            min-height: 70px;
+            border-bottom: #77aaff 3px solid;
+        }
+        header a {
+            color: #fff;
+            text-decoration: none;
+            text-transform: uppercase;
+            font-size: 16px;
+        }
+        header ul {
+            padding: 0;
+            list-style: none;
+        }
+        header li {
+            float: left;
+            display: inline;
+            padding: 0 20px 0 20px;
+        }
+        .main {
+            padding: 20px;
+            background: #fff;
+            margin-top: 20px;
+        }
+        .form-group {
+            margin-bottom: 15px;
+        }
+        .form-group label {
+            display: block;
+            margin-bottom: 5px;
+        }
+        .form-group input, .form-group select {
+            width: 100%;
+            padding: 8px;
+            box-sizing: border-box;
+        }
+        .btn {
+            display: inline-block;
+            background: #333;
+            color: #fff;
+            padding: 10px 20px;
+            text-decoration: none;
+            cursor: pointer;
+        }
+        .btn:hover {
+            background: #555;
+        }
+        table {
+            width: 100%;
+            margin-top: 20px;
+            border-collapse: collapse;
+        }
+        table, th, td {
+            border: 1px solid #ddd;
+        }
+        th, td {
+            padding: 10px;
+            text-align: left;
+        }
+        th {
+            background: #333;
+            color: #fff;
+        }
+    </style>
+</head>
+<body>
+    <header>
+        <div class="container">
+            <h1>Estacionamento</h1>
+        </div>
+    </header>
+    <div class="container main">
+        <h2>Cadastro de Veículos</h2>
+        <form id="vehicleForm">
+            <div class="form-group">
+                <label for="plate">Placa</label>
+                <input type="text" id="plate" name="plate" required>
+            </div>
+            <div class="form-group">
+                <label for="model">Modelo</label>
+                <input type="text" id="model" name="model" required>
+            </div>
+            <div class="form-group">
+                <label for="entryDate">Data de Entrada</label>
+                <input type="datetime-local" id="entryDate" name="entryDate" required>
+            </div>
+            <button type="submit" class="btn">Adicionar Veículo</button>
+        </form>
+        <h2>Veículos Estacionados</h2>
+        <table id="vehicleTable">
+            <thead>
+                <tr>
+                    <th>Placa</th>
+                    <th>Modelo</th>
+                    <th>Data de Entrada</th>
+                    <th>Ações</th>
+                </tr>
+            </thead>
+            <tbody>
+                <!-- Veículos serão adicionados aqui -->
+            </tbody>
+        </table>
+    </div>
+    <script>
+        document.getElementById('vehicleForm').addEventListener('submit', function(e) {
+            e.preventDefault();
+            const plate = document.getElementById('plate').value;
+            const model = document.getElementById('model').value;
+            const entryDate = document.getElementById('entryDate').value;
+
+            const table = document.getElementById('vehicleTable').getElementsByTagName('tbody')[0];
+            const newRow = table.insertRow();
+
+            const cell1 = newRow.insertCell(0);
+            const cell2 = newRow.insertCell(1);
+            const cell3 = newRow.insertCell(2);
+            const cell4 = newRow.insertCell(3);
+
+            cell1.innerHTML = plate;
+            cell2.innerHTML = model;
+            const formattedDate = new Date(entryDate).toLocaleString('pt-BR', { dateStyle: 'short', timeStyle: 'short' });
+            cell3.innerHTML = formattedDate;
+            cell4.innerHTML = `<button onclick="editVehicle(this)">Editar</button> <button onclick="deleteVehicle(this)">Excluir</button>`;
+
+            document.getElementById('vehicleForm').reset();
+        });
+
+        function editVehicle(btn) {
+            const row = btn.parentNode.parentNode;
+            document.getElementById('plate').value = row.cells[0].innerHTML;
+            document.getElementById('model').value = row.cells[1].innerHTML;
+            document.getElementById('entryDate').value = row.cells[2].innerHTML;
+            row.parentNode.removeChild(row);
+        }
+
+        function deleteVehicle(btn) {
+            const row = btn.parentNode.parentNode;
+            row.parentNode.removeChild(row);
+        }
+    </script>
+</body>
+</html>
